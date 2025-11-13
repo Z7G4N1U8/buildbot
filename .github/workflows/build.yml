@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  android: "LineageOS"
+  branch: "lineage-23.0"
+  manifest: "https://github.com/LineageOS/android.git"
+
+jobs:
+  build:
+    name: Build
+    runs-on: self-hosted
+
+    steps:
+      - name: Setup Project
+        run: |
+          echo "project=$HOME/${{ env.android }}" >> $GITHUB_ENV
+          mkdir -p ~/${{ env.android }} ~/artifacts/${{ github.run_id }}
+          cd ~/${{ env.android }}
+          rm -rf .repo/local_manifests vendor/lineage-priv/keys
+          repo init --depth 1 --git-lfs -u ${{ env.manifest }} -b ${{ env.branch }}
+          git clone https://github.com/${{ github.actor }}/local_manifests .repo/local_manifests
+          git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_lineage-priv_keys vendor/lineage-priv/keys
+          curl -LSs https://raw.githubusercontent.com/accupara/docker-images/refs/heads/master/aosp/common/resync.sh | bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Compile
+        working-directory: ${{ env.project }}
+        run: |
+          export BUILD_USERNAME=peace
+          export BUILD_HOSTNAME=github
+          export SKIP_ABI_CHECKS=true
+
+          source build/envsetup.sh
+          breakfast eqe userdebug
+          cmka bacon
+
+      - name: Cleanup
+        working-directory: ${{ env.project }}
+        run: rm -rf .repo/local_manifests out/target/product/eqe/*ota* vendor/lineage-priv/keys
+
+      - name: Copy Artifacts
+        if: ${{ success() }}
+        working-directory: ${{ env.project }}
+        run: cp out/target/product/eqe/{*.zip,boot.img,init_boot.img,vendor_boot.img,super_empty.img,recovery.img} ~/artifacts/${{ github.run_id }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ env.android }}_${{ github.run_id }}
+          path: ~/artifacts/${{ github.run_id }}
+
+      - name: Display Error
+        if: ${{ failure() }}
+        working-directory: ${{ env.project }}
+        run: cat out/error.log
