@@ -14,6 +14,20 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
+      - name: Get Runner Registration Token
+        id: get_token
+        run: |
+          TOKEN_JSON=$(curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/runners/registration-token)
+
+          RUNNER_TOKEN=$(echo $TOKEN_JSON | jq -r .token)
+          echo "::add-mask::${RUNNER_TOKEN}"
+          echo "token=${RUNNER_TOKEN}" >> $GITHUB_OUTPUT
+
       - name: Setup runner
         uses: appleboy/ssh-action@master
         with:
@@ -29,14 +43,9 @@ jobs:
             tar -xvf actions-runner-linux-x64.tar.gz -C actions-runner
             rm -rf actions-runner-linux-x64.tar.gz
             cd actions-runner
-            ./config.sh --unattended --url "https://github.com/${{ github.repository }}" --token "${{ secrets.token }}" --replace
+            ./config.sh --unattended --url "https://github.com/${{ github.repository }}" --token "${{ steps.get_token.outputs.token }}" --replace
 
-            sudo apt update -y && sudo apt install -y tmux
-            if tmux has-session -t ghactions; then
-              echo "Runner is already Running"
-            else
-              tmux kill-session -t ghactions;
-              tmux new-session -d -s ghactions
-              tmux send-keys -t ghactions './run.sh' Enter
-              echo "Runner Started"
-            fi
+            tmux kill-session -t ghactions
+            tmux new-session -d -s ghactions
+            tmux send-keys -t ghactions './run.sh' Enter || echo "Failed to start runner"
+            echo "Runner Started"
