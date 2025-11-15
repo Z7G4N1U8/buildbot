@@ -1,0 +1,55 @@
+name: Main
+
+on:
+  workflow_dispatch:
+    inputs:
+      android:
+        description: "ROM to build"
+        required: true
+        type: choice
+        options: ["LineageOS", "EvolutionX"]
+      build:
+        description: "Build type of ROM"
+        required: true
+        type: choice
+        options: ["user", "userdebug", "eng"]
+      release:
+        description: "Create release"
+        required: true
+        type: boolean
+      upload:
+        description: 'Upload build artifacts'
+        required: true
+        type: boolean
+      host:
+        description: "hostname of server"
+        required: true
+      port:
+        description: "port of server"
+        required: true
+
+jobs:
+  setup:
+    uses: ./.github/workflows/setup.yml
+    secrets: inherit
+    with:
+      host: ${{ inputs.host }}
+      port: ${{ inputs.port }}
+
+  build:
+    uses: ./.github/workflows/build.yml
+    needs: setup
+    secrets: inherit
+    with:
+      android: ${{ inputs.android }}
+      build: ${{ inputs.build }}
+
+  release:
+    if: ${{ inputs.release }}
+    uses: ./.github/workflows/release.yml
+    needs: build
+    secrets: inherit
+    with:
+      android: ${{ inputs.android }}
+      build: ${{ inputs.build }}
+      upload: ${{ inputs.upload }}
