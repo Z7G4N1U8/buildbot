@@ -2,6 +2,13 @@ name: Setup server
 
 on:
   workflow_call:
+    inputs:
+      host:
+        required: true
+        type: string
+      port:
+        required: true
+        type: string
 
 jobs:
   main:
