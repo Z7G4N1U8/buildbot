@@ -23,7 +23,7 @@ jobs:
 
       - name: Set Release Tag and Notes
         run: |
-          echo "release=${{ inputs.android }}-$(date +"%Y-%m-%d")" >> $GITHUB_ENV
+          echo "release=${{ inputs.android }}-$(date +"%Y.%m.%d")" >> $GITHUB_ENV
           cat << EOF > release_notes.md
 
           Notes:
