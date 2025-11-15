@@ -44,7 +44,7 @@ jobs:
           git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_${{ env.target }}-priv_keys vendor/${{ env.target }}-priv/keys
           curl -LSs https://raw.githubusercontent.com/accupara/docker-images/refs/heads/master/aosp/common/resync.sh | bash
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.token }}
 
       - name: Compile
         working-directory: ${{ env.project }}
