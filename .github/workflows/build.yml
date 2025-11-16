@@ -50,7 +50,7 @@ jobs:
         working-directory: ${{ env.project }}/device/motorola/eqe
         run: |
           curl -LSs https://raw.githubusercontent.com/AndroidDumps/dumpyara/refs/heads/master/setup.sh | bash
-          sudo apt update -y && sudo apt install -y protobuf-compiler python3-protobuf
+          sudo apt-get update -y && sudo apt-get install -y protobuf-compiler python3-protobuf
           ./extract-files.py https://mirrors.lolinet.com/firmware/lenomola/2024/eqe/official/RETAIL/EQE_RETAIL_15_V1UMS35H.10-67-7-2_subsidy-DEFAULT_regulatory-DEFAULT_cid50_CFC.xml.zip
 
       - name: Compile
