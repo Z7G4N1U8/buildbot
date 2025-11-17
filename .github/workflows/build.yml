@@ -43,6 +43,7 @@ jobs:
           git clone https://github.com/${{ github.actor }}/local_manifests .repo/local_manifests
           git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_${{ env.target }}-priv_keys vendor/${{ env.target }}-priv/keys
           curl -LSs https://raw.githubusercontent.com/accupara/docker-images/refs/heads/master/aosp/common/resync.sh | bash
+          repo forall -g local -c "git fetch --unshallow"
         env:
           GH_TOKEN: ${{ secrets.token }}
 
