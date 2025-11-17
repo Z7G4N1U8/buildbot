@@ -1,0 +1,43 @@
+name: Cleanup
+
+on:
+  workflow_call:
+    inputs:
+      host:
+        required: true
+        type: string
+      port:
+        required: true
+        type: string
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Token
+        id: get_token
+        run: |
+          TOKEN_JSON=$(curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.token }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/runners/remove-token)
+
+          REMOVE_TOKEN=$(echo $TOKEN_JSON | jq -r .token)
+          echo "::add-mask::${REMOVE_TOKEN}"
+          echo "token=${REMOVE_TOKEN}" >> $GITHUB_OUTPUT
+
+      - name: Runner
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ inputs.host }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.password }}
+          port: ${{ inputs.port }}
+          script: |
+            cd actions-runner
+            tmux kill-session -t ghactions
+            ./config.sh remove --token ${{ steps.get_token.outputs.token }}
+            cd ..
+            rm -rf actions-runner

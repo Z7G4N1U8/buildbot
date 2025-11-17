@@ -53,3 +53,12 @@ jobs:
       android: ${{ inputs.android }}
       build: ${{ inputs.build }}
       upload: ${{ inputs.upload }}
+
+  cleanup:
+    if: ${{ always() }}
+    uses: ./.github/workflows/cleanup.yml
+    needs: build
+    secrets: inherit
+    with:
+      host: ${{ inputs.host }}
+      port: ${{ inputs.port }}

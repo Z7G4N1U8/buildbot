@@ -36,7 +36,6 @@ jobs:
           password: ${{ secrets.password }}
           port: ${{ inputs.port }}
           script: |
-            rm -rf actions-runner
             mkdir -p actions-runner
             version=$(curl -s "https://api.github.com/repos/actions/runner/releases/latest" | grep -oP '"tag_name": "\K[^"]*' | sed 's/^v//')
             curl -o actions-runner-linux-x64.tar.gz -LSs https://github.com/actions/runner/releases/download/v${version}/actions-runner-linux-x64-${version}.tar.gz
@@ -44,8 +43,5 @@ jobs:
             rm -rf actions-runner-linux-x64.tar.gz
             cd actions-runner
             ./config.sh --unattended --url "https://github.com/${{ github.repository }}" --token "${{ steps.get_token.outputs.token }}" --replace
-
-            tmux kill-session -t ghactions
             tmux new-session -d -s ghactions
             tmux send-keys -t ghactions './run.sh' Enter || echo "Failed to start runner"
-            echo "Runner Started"
