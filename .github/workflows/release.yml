@@ -9,9 +9,6 @@ on:
       build:
         required: true
         type: string
-      upload:
-        required: true
-        type: boolean
 
 jobs:
   main:
@@ -51,13 +48,13 @@ jobs:
           body_path: release_notes.md
 
       - name: Download all artifacts
-        if: ${{ inputs.upload }}
+        if: ${{ inputs.android == "LineageOS" }}
         uses: actions/download-artifact@main
         with:
           path: artifacts
 
       - name: Upload Release Assets
-        if: ${{ inputs.upload }}
+        if: ${{ inputs.android == "LineageOS" }}
         run: |
           for file in $(find artifacts -type f); do
             echo "Uploading $file..."

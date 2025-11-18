@@ -17,10 +17,6 @@ on:
         description: "Create release"
         required: true
         type: boolean
-      upload:
-        description: 'Upload build artifacts'
-        required: true
-        type: boolean
       host:
         description: "hostname of server"
         required: true
