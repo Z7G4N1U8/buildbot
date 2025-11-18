@@ -3,16 +3,6 @@ name: Main
 on:
   workflow_dispatch:
     inputs:
-      android:
-        description: "ROM to build"
-        required: true
-        type: choice
-        options: ["LineageOS", "EvolutionX"]
-      build:
-        description: "Build type of ROM"
-        required: true
-        type: choice
-        options: ["user", "userdebug", "eng"]
       release:
         description: "Create release"
         required: true
@@ -36,19 +26,12 @@ jobs:
     uses: ./.github/workflows/build.yml
     needs: setup
     secrets: inherit
-    with:
-      android: ${{ inputs.android }}
-      build: ${{ inputs.build }}
 
   release:
     if: ${{ inputs.release }}
     uses: ./.github/workflows/release.yml
     needs: build
     secrets: inherit
-    with:
-      android: ${{ inputs.android }}
-      build: ${{ inputs.build }}
-      upload: ${{ inputs.upload }}
 
   cleanup:
     if: ${{ always() }}

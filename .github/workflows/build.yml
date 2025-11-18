@@ -2,13 +2,6 @@ name: Build
 
 on:
   workflow_call:
-    inputs:
-      android:
-        required: true
-        type: string
-      build:
-        required: true
-        type: string
 
 jobs:
   main:
@@ -17,31 +10,15 @@ jobs:
     steps:
       - name: Setup Project
         run: |
-          echo "project=$HOME/${{ inputs.android }}" >> $GITHUB_ENV
-          mkdir -p ~/${{ inputs.android }} ~/artifacts/${{ github.run_id }}
-
-          set_vars() {
-            echo "manifest=$1" >> "$GITHUB_ENV"
-            echo "branch=$2" >> "$GITHUB_ENV"
-            echo "target=$3" >> "$GITHUB_ENV"
-          }
-
-          case "${{ inputs.android }}" in
-            "LineageOS")
-              set_vars "https://github.com/LineageOS/android.git" "lineage-23.0" "lineage"
-            ;;
-            "EvolutionX")
-              set_vars "https://github.com/Evolution-X/manifest.git" "bka" "evolution"
-            ;;
-          esac
+          echo "project=$HOME/LineageOS >> $GITHUB_ENV
+          mkdir -p ~/LineageOS ~/artifacts/${{ github.run_id }}
 
       - name: Sync Source
         working-directory: ${{ env.project }}
         run: |
-          rm -rf out/target/product/eqe .repo/local_manifests vendor/${{ env.target }}-priv/keys
-          repo init --depth 1 --git-lfs -u ${{ env.manifest }} -b ${{ env.branch }}
+          repo init --depth 1 --git-lfs -u https://github.com/LineageOS/android.git -b lineage-23.0
           git clone https://github.com/${{ github.actor }}/local_manifests .repo/local_manifests
-          git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_${{ env.target }}-priv_keys vendor/${{ env.target }}-priv/keys
+          git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_lineage-priv_keys vendor/lineage-priv/keys
           curl -LSs https://raw.githubusercontent.com/accupara/docker-images/refs/heads/master/aosp/common/resync.sh | bash
           repo forall -g local -c "git fetch --unshallow"
         env:
@@ -50,16 +27,13 @@ jobs:
       - name: Compile
         working-directory: ${{ env.project }}
         run: |
-          export BUILD_USERNAME=peace
-          export BUILD_HOSTNAME=github
-          export SKIP_ABI_CHECKS=true
-
           source build/envsetup.sh
-          brunch eqe ${{ inputs.build }}
-
-      - name: Cleanup
-        working-directory: ${{ env.project }}
-        run: rm -rf .repo/local_manifests out/target/product/eqe/*ota* vendor/${{ env.target }}-priv/keys
+          breakfast eqe userdebug
+          cmka bacon
+        env:
+          BUILD_USERNAME: peace
+          BUILD_HOSTNAME: github
+          SKIP_ABI_CHECKS: true
 
       - name: Copy Artifacts
         if: ${{ success() }}
@@ -69,7 +43,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@main
         with:
-          name: ${{ inputs.android }}_${{ github.run_id }}
+          name: LineageOS_${{ github.run_id }}
           path: ~/artifacts/${{ github.run_id }}
 
       - name: Display Error

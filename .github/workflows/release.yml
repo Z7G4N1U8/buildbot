@@ -2,13 +2,6 @@ name: Release
 
 on:
   workflow_call:
-    inputs:
-      android:
-        required: true
-        type: string
-      build:
-        required: true
-        type: string
 
 jobs:
   main:
@@ -20,41 +13,33 @@ jobs:
 
       - name: Set Release Tag and Notes
         run: |
-          echo "release=${{ inputs.android }}-$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+          echo "release=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
           cat << EOF > release_notes.md
 
           Notes:
           -> Device: Motorola Edge 50 Pro (eqe)
           -> Build Date: $(date +"%d %B %Y")
-          -> Build Type: ${{ inputs.build }}
+          -> Build Type: Userdebug
 
           Links:
-          -> [Source](https://github.com/${{ github.actor }}/local_manifests)
           -> [Run Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          -> [MindTheGapps](https://github.com/MindTheGapps/16.0.0-arm64/releases/latest)
           -> [Support Group](https://t.me/MotorolaEdge50Pro)
           EOF
-
-          if [ "${{ inputs.android }}" == "LineageOS" ]; then
-            echo "-> [MindTheGapps](https://github.com/MindTheGapps/16.0.0-arm64/releases/latest)" >> release_notes.md
-          else
-            echo "-> [Download](https://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}/${{ inputs.android }}_${{ github.run_id }}.zip)" >> release_notes.md
-          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@master
         with:
-          name: ${{ inputs.android }}
+          name: LineageOS
           tag_name: ${{ env.release }}
           body_path: release_notes.md
 
       - name: Download all artifacts
-        if: ${{ inputs.android == "LineageOS" }}
         uses: actions/download-artifact@main
         with:
           path: artifacts
 
       - name: Upload Release Assets
-        if: ${{ inputs.android == "LineageOS" }}
         run: |
           for file in $(find artifacts -type f); do
             echo "Uploading $file..."
