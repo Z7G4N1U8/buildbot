@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Setup Project
         run: |
-          echo "project=$HOME/LineageOS >> $GITHUB_ENV
+          echo "project=$HOME/LineageOS" >> $GITHUB_ENV
           mkdir -p ~/LineageOS ~/artifacts/${{ github.run_id }}
 
       - name: Sync Source
