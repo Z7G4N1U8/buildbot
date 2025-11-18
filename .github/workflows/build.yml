@@ -29,16 +29,12 @@ jobs:
         run: |
           source build/envsetup.sh
           breakfast eqe userdebug
-          cmka bacon
+          cmka bacon || exit 1
+          cp $OUT/{*-eqe.zip,*boot.img,super_empty.img,recovery.img} ~/artifacts/${{ github.run_id }}
         env:
           BUILD_USERNAME: peace
           BUILD_HOSTNAME: github
           SKIP_ABI_CHECKS: true
-
-      - name: Copy Artifacts
-        if: ${{ success() }}
-        working-directory: ${{ env.project }}
-        run: cp out/target/product/eqe/{*.zip,boot.img,init_boot.img,vendor_boot.img,super_empty.img,recovery.img} ~/artifacts/${{ github.run_id }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@main
