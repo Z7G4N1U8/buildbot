@@ -4,7 +4,7 @@ SOURCES_FILE="/etc/apt/sources.list.d/debian.sources"
 
 packages=(
   "7zip"
-  "aria2" "arj" "axel"
+  "android-sdk-platform-tools" "aria2" "arj" "axel"
   "bc" "bison" "brotli" "build-essential"
   "cabextract" "ccache" "cpio" "curl"
   "detox" "device-tree-compiler"
