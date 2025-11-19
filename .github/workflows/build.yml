@@ -21,7 +21,7 @@ jobs:
           repo init --depth 1 --git-lfs -u https://github.com/LineageOS/android.git -b lineage-23.0
           git clone https://github.com/${{ github.actor }}/local_manifests .repo/local_manifests
           git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_lineage-priv_keys vendor/lineage-priv/keys
-          curl -LSs https://raw.githubusercontent.com/accupara/docker-images/refs/heads/master/aosp/common/resync.sh | bash
+          curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/sync.sh | bash
           repo forall -g local -c "git fetch --unshallow"
         env:
           GH_TOKEN: ${{ secrets.token }}
