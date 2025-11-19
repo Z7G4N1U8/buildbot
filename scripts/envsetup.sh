@@ -14,7 +14,7 @@ packages=(
   "lib32ncurses5-dev" "lib32readline-dev" "lib32z1-dev" "liblz4-dev" "liblz4-tool" "liblzma-dev" "libncurses5" "libncurses5-dev" "libdw-dev" "libelf-dev" "libsdl1.2-dev" "libssl-dev" "libxml2" "libxml2-utils" "lz4" "lzop"
   "mpack"
   "p7zip-full" "p7zip-rar" "pngcrush" "protobuf-compiler" "python3-pip" "python3-protobuf" "python-is-python3"
-  "rar" "rename" "ripgrep" "rsync"
+  "rar" "rename" "ripgrep" "repo" "rsync"
   "schedtool" "sharutils" "squashfs-tools"
   "unace" "unrar" "unzip" "uudeview"
   "xsltproc"
@@ -50,11 +50,6 @@ sudo apt-get install -y "${packages[@]}"
 
 # Installing uv
 curl -LsSf https://astral.sh/uv/install.sh | bash
-
-# Install repo
-mkdir -p ~/bin
-curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-chmod a+x ~/bin/repo
 
 # Configure git
 git config --global user.name "Peace"
