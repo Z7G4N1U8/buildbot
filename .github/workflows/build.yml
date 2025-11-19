@@ -2,15 +2,22 @@ name: Build
 
 on:
   workflow_call:
+    inputs:
+      envsetup:
+        required: true
+        type: boolean
 
 jobs:
   main:
     runs-on: self-hosted
 
     steps:
+      - name: Setup Environment
+        if: ${{ inputs.envsetup }}
+        run: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/envsetup.sh | bash
+
       - name: Setup Project
         run: |
-          curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/envsetup.sh | bash
           echo "project=$HOME/LineageOS" >> $GITHUB_ENV
           mkdir -p ~/LineageOS ~/artifacts/${{ github.run_id }}
 
