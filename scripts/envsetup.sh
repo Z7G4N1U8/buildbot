@@ -48,19 +48,13 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install -y "${packages[@]}"
 
-# Installing uv
+# Install additional stuff
 curl -LsSf https://astral.sh/uv/install.sh | bash
-
-# Configure git
-git config --global user.name "Peace"
-git config --global user.email "git@z7g4n1u8.dev"
-git config --global trailer.changeid.key "Change-Id"
 git lfs install
 
 # Setup ccache
 cat << EOF >> ~/.bashrc
 USE_CCACHE=1
 CCACHE_EXEC=/usr/bin/ccache
-TERM=xterm
 EOF
 ccache -M 50G
