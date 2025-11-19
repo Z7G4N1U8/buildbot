@@ -8,6 +8,7 @@ repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune 2
 if grep -qe "Failing repos\|uncommitted changes are present" /tmp/output.txt ; then
   echo "Found failing repositories, trying to fix..."
 
+  # Extract path of failing repositories
   bad_repos=$(awk '
     /Failing repos.*:/ {flag=1; next}
     /Try/ {flag=0}
@@ -15,19 +16,20 @@ if grep -qe "Failing repos\|uncommitted changes are present" /tmp/output.txt ; t
     /uncommitted changes are present/ {print $2}
   ' /tmp/output.txt | sed 's/://g' | sort -u)
 
+  # Delete all failing repositories
   if [ -n "$bad_repos" ]; then
     for repo_path in $bad_repos; do
       [ -z "$repo_path" ] && continue
-      echo "Fixing: $repo_path"
-      rm -rf "$repo_path"
-      rm -rf ".repo/projects/$repo_path.git"
+      echo "Deleting: $repo_path"
+      rm -rf "$repo_path" ".repo/projects/$repo_path.git"
     done
-  fi
-else
-  exit 0
-fi
 
-# Sync all repositories after deletion
-echo "Re-syncing all repositories..."
-find .repo -name '*.lock' -delete
-repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune
+    # Sync all repositories after deletion
+    echo "Re-syncing all repositories..."
+    find .repo -name '*.lock' -delete
+    repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune
+  else
+    echo "Error detected, but could not fix. Check logs manually."
+    exit 1
+  fi
+fi
