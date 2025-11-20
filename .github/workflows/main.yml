@@ -11,6 +11,9 @@ on:
         description: "Setup Build Environment"
         required: true
         type: boolean
+      user:
+        description: "username on server"
+        required: true
       host:
         description: "hostname of server"
         required: true
@@ -23,6 +26,7 @@ jobs:
     uses: ./.github/workflows/setup.yml
     secrets: inherit
     with:
+      user: ${{ inputs.user }}
       host: ${{ inputs.host }}
       port: ${{ inputs.port }}
 
@@ -45,5 +49,6 @@ jobs:
     needs: build
     secrets: inherit
     with:
+      user: ${{ inputs.user }}
       host: ${{ inputs.host }}
       port: ${{ inputs.port }}

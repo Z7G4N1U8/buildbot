@@ -3,6 +3,9 @@ name: Setup server
 on:
   workflow_call:
     inputs:
+      user:
+        required: true
+        type: string
       host:
         required: true
         type: string
@@ -32,7 +35,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ inputs.host }}
-          username: ${{ github.actor }}
+          username: ${{ inputs.user }}
           password: ${{ secrets.password }}
           port: ${{ inputs.port }}
           script: |
