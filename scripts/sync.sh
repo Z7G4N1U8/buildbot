@@ -33,3 +33,6 @@ if grep -qe "Failing repos\|uncommitted changes are present" sync_output.txt ; t
     exit 1
   fi
 fi
+
+# Remove uncommitted/unstaged changes
+repo forall -j$(nproc --all) -c "git reset --hard ; git clean -fdx"
