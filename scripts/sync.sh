@@ -2,10 +2,10 @@
 
 # Run repo sync command and capture the output
 find .repo -name '*.lock' -delete
-repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune 2>&1 | tee /tmp/output.txt
+repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune 2>&1 | tee sync_output.txt
 
 # Check if there's any failing repositories
-if grep -qe "Failing repos\|uncommitted changes are present" /tmp/output.txt ; then
+if grep -qe "Failing repos\|uncommitted changes are present" sync_output.txt ; then
   echo "Found failing repositories, trying to fix..."
 
   # Extract path of failing repositories
@@ -14,7 +14,7 @@ if grep -qe "Failing repos\|uncommitted changes are present" /tmp/output.txt ; t
     /Try/ {flag=0}
     flag {print $NF}
     /uncommitted changes are present/ {print $2}
-  ' /tmp/output.txt | sed 's/://g' | sort -u)
+  ' sync_output.txt | sed 's/://g' | sort -u)
 
   # Delete all failing repositories
   if [ -n "$bad_repos" ]; then
