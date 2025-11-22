@@ -29,7 +29,6 @@ jobs:
           git clone https://github.com/${{ github.actor }}/local_manifests .repo/local_manifests
           git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_lineage-priv_keys vendor/lineage-priv/keys
           curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/sync.sh | bash
-          repo forall -j$(nproc) -g local -c "git fetch --unshallow"
         env:
           GH_TOKEN: ${{ secrets.token }}
 

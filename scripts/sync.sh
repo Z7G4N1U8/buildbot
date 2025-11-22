@@ -36,3 +36,6 @@ fi
 
 # Remove uncommitted/unstaged changes
 repo forall -j$(nproc --all) -c "git reset --hard ; git clean -fdx"
+
+# Unshallow all repositories on local group
+repo forall -j$(nproc --all) -g local -c "git fetch --unshallow"
