@@ -16,7 +16,7 @@ packages=(
   "schedtool" "sharutils" "squashfs-tools"
   "unace" "unrar" "unzip" "uudeview"
   "xsltproc"
-  "zip" "zlib1g-dev"
+  "zip" "zlib1g-dev" "zram-tools" "zstd"
 )
 
 # Update system and install all necessary packages
@@ -37,6 +37,17 @@ git lfs install
 export USE_CCACHE=1
 export CCACHE_EXEC=/usr/bin/ccache
 ccache -M 50G
+
+# Setup zram
+cat << EOF | sudo tee /etc/default/zramswap > /dev/null
+ALGO=zstd
+PERCENT=100
+PRIORITY=100
+EOF
+
+sudo systemctl restart zramswap
+sudo sysctl vm.swappiness=100 > /dev/null
+sudo zramctl
 
 # Setup RBE
 rm -rf $HOME/rbe client-linux-amd64.zip
