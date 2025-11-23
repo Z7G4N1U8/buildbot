@@ -13,22 +13,18 @@ jobs:
           echo "project=$HOME/LineageOS" >> $GITHUB_ENV
           mkdir -p ~/LineageOS ~/artifacts/${{ github.run_id }}
 
-      - name: Sync Source
+      - name: Build
         working-directory: ${{ env.project }}
         run: |
+          source <(curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/envsetup.sh)
+
           rm -rf .repo/local_manifests vendor/lineage-priv/keys
           repo init --depth 1 --git-lfs -u https://github.com/LineageOS/android.git -b lineage-23.0
           git clone https://github.com/${{ github.actor }}/local_manifests .repo/local_manifests
           git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_lineage-priv_keys vendor/lineage-priv/keys
           curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/sync.sh | bash
-        env:
-          GH_TOKEN: ${{ secrets.token }}
 
-      - name: Compile
-        working-directory: ${{ env.project }}
-        run: |
           source build/envsetup.sh
-          source <(curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/envsetup.sh)
           breakfast eqe userdebug
           cmka bacon || exit 1
           cp $OUT/{*-eqe.zip,*boot.img,super_empty.img,recovery.img} ~/artifacts/${{ github.run_id }}
@@ -37,6 +33,7 @@ jobs:
           BUILD_HOSTNAME: github
           SKIP_ABI_CHECKS: true
           RBE_remote_headers: ${{ secrets.buildbuddy }}
+          GH_TOKEN: ${{ secrets.token }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@main
