@@ -24,6 +24,11 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install -y "${packages[@]}"
 
+# Configure git
+git config --global user.name "Peace"
+git config --global user.email "git@z7g4n1u8.dev"
+git config --global color.ui true
+
 # Install additional stuff
 curl -LsSf https://astral.sh/uv/install.sh | bash
 git lfs install
