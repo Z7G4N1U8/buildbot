@@ -9,7 +9,7 @@ packages=(
   "flex"
   "g++-multilib" "gawk" "gcc-multilib" "git" "git-lfs" "gnupg" "gperf"
   "imagemagick"
-  "lib32ncurses-dev" "lib32readline-dev" "lib32z1-dev" "liblz4-dev" "liblz4-tool" "liblzma-dev" "libncurses6" "libncurses-dev" "libdw-dev" "libelf-dev" "libsdl1.2-dev" "libssl-dev" "libxml2" "libxml2-utils" "lz4" "lzop"
+  "lib32ncurses-dev" "lib32readline-dev" "lib32z1-dev" "liblz4-dev" "liblz4-tool" "liblzma-dev" "libncurses6" "libncurses-dev" "libdw-dev" "libelf-dev" "libsdl1.2-dev" "libssl-dev" "libxml2" "libxml2-utils" "linux-modules-extra-$(uname -r)" "lz4" "lzop"
   "mpack"
   "p7zip-full" "p7zip-rar" "pngcrush" "protobuf-compiler" "python3-pip" "python3-protobuf" "python-is-python3"
   "rar" "rename" "ripgrep" "repo" "rsync"
