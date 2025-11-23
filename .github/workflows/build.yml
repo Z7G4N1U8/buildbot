@@ -2,20 +2,12 @@ name: Build
 
 on:
   workflow_call:
-    inputs:
-      envsetup:
-        required: true
-        type: boolean
 
 jobs:
   main:
     runs-on: self-hosted
 
     steps:
-      - name: Setup Environment
-        if: ${{ inputs.envsetup }}
-        run: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/envsetup.sh | bash
-
       - name: Setup Project
         run: |
           echo "project=$HOME/LineageOS" >> $GITHUB_ENV
@@ -36,6 +28,7 @@ jobs:
         working-directory: ${{ env.project }}
         run: |
           source build/envsetup.sh
+          source <(curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/envsetup.sh)
           breakfast eqe userdebug
           cmka bacon || exit 1
           cp $OUT/{*-eqe.zip,*boot.img,super_empty.img,recovery.img} ~/artifacts/${{ github.run_id }}
@@ -43,6 +36,7 @@ jobs:
           BUILD_USERNAME: peace
           BUILD_HOSTNAME: github
           SKIP_ABI_CHECKS: true
+          RBE_remote_headers: ${{ secrets.buildbuddy }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@main

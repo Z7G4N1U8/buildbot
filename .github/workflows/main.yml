@@ -7,10 +7,6 @@ on:
         description: "Create release"
         required: true
         type: boolean
-      envsetup:
-        description: "Setup Build Environment"
-        required: true
-        type: boolean
       user:
         description: "username on server"
         required: true
@@ -34,8 +30,6 @@ jobs:
     uses: ./.github/workflows/build.yml
     needs: setup
     secrets: inherit
-    with:
-      envsetup: ${{ inputs.envsetup }}
 
   release:
     if: ${{ inputs.release }}
