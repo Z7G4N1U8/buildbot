@@ -7,24 +7,11 @@ on:
         description: "Create release"
         required: true
         type: boolean
-      user:
-        description: "username on server"
-        required: true
-      host:
-        description: "hostname of server"
-        required: true
-      port:
-        description: "port of server"
-        required: true
 
 jobs:
   setup:
     uses: ./.github/workflows/setup.yml
     secrets: inherit
-    with:
-      user: ${{ inputs.user }}
-      host: ${{ inputs.host }}
-      port: ${{ inputs.port }}
 
   build:
     uses: ./.github/workflows/build.yml
@@ -42,7 +29,3 @@ jobs:
     uses: ./.github/workflows/cleanup.yml
     needs: build
     secrets: inherit
-    with:
-      user: ${{ inputs.user }}
-      host: ${{ inputs.host }}
-      port: ${{ inputs.port }}

@@ -2,16 +2,6 @@ name: Cleanup
 
 on:
   workflow_call:
-    inputs:
-      user:
-        required: true
-        type: string
-      host:
-        required: true
-        type: string
-      port:
-        required: true
-        type: string
 
 jobs:
   main:
@@ -34,10 +24,9 @@ jobs:
       - name: Runner
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ inputs.host }}
-          username: ${{ inputs.user }}
-          password: ${{ secrets.password }}
-          port: ${{ inputs.port }}
+          host: ${{ secrets.gcp_host }}
+          username: ${{ secrets.gcp_user }}
+          key: ${{ secrets.gcp_key }}
           script: |
             cd actions-runner
             tmux kill-session -t ghactions
