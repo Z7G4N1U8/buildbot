@@ -47,6 +47,7 @@ EOF
 
 sudo systemctl restart zramswap
 sudo sysctl vm.swappiness=100 > /dev/null
+sudo sysctl vm.page-cluster=0 > /dev/null
 sudo zramctl
 
 # Setup RBE
