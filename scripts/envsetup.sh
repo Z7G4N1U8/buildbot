@@ -33,6 +33,9 @@ git config --global color.ui true
 curl -LsSf https://astral.sh/uv/install.sh | bash
 git lfs install
 
+# remount root as noatime
+sudo mount -o remount,rw,noatime /
+
 # Setup ccache
 export USE_CCACHE=1
 export CCACHE_EXEC=/usr/bin/ccache
@@ -48,6 +51,9 @@ EOF
 sudo systemctl restart zramswap
 sudo sysctl vm.swappiness=100 > /dev/null
 sudo sysctl vm.page-cluster=0 > /dev/null
+sudo sysctl vm.vfs_cache_pressure=50 > /dev/null
+sudo sysctl vm.dirty_background_bytes=419430400 > /dev/null
+sudo sysctl vm.dirty_bytes=1073741824 > /dev/null
 sudo zramctl
 
 # Setup RBE
