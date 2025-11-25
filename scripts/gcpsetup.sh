@@ -15,7 +15,7 @@ packages=(
   "lib32ncurses-dev" "lib32readline-dev" "lib32z1-dev" "liblz4-dev" "liblz4-tool" "liblzma-dev" "libncurses6" "libncurses-dev" "libdw-dev" "libelf-dev" "libsdl1.2-dev" "libssl-dev" "libxml2" "libxml2-utils" "linux-modules-extra-$(uname -r)" "lz4" "lzop"
   "micro" "mpack"
   "p7zip-full" "p7zip-rar" "pngcrush" "protobuf-compiler" "python3-pip" "python3-protobuf" "python-is-python3"
-  "rar" "rename" "ripgrep" "repo" "rsync"
+  "rar" "rename" "ripgrep" "rsync"
   "schedtool" "sharutils" "squashfs-tools"
   "unace" "unrar" "unzip" "uudeview"
   "xsltproc"
@@ -37,6 +37,12 @@ git config --global gc.auto 0
 # Install additional stuff
 curl -LsSf https://astral.sh/uv/install.sh | bash
 git lfs install
+
+# Install repo
+if [ ! -f "~/.local/bin/repo" ]; then
+  curl -LSs https://storage.googleapis.com/git-repo-downloads/repo > ~/.local/bin/repo
+  chmod a+x ~/.local/bin/repo
+fi
 
 # Setup RBE
 if [ ! -d "$HOME/rbe" ]; then
