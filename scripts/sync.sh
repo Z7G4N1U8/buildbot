@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# Remove uncommitted/unstaged changes
+repo forall -j$(nproc --all) -c "git reset --hard ; git clean -fdx" > /dev/null
+
 # Run repo sync command and capture the output
 find .repo -name '*.lock' -delete
 repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune 2>&1 | tee sync_output.txt
 
 # Check if there's any failing repositories
-if grep -qe "Failing repos\|uncommitted changes are present" sync_output.txt ; then
+if grep -qe "Failing repos" sync_output.txt ; then
   echo "Found failing repositories, trying to fix..."
 
   # Extract path of failing repositories
@@ -13,7 +16,6 @@ if grep -qe "Failing repos\|uncommitted changes are present" sync_output.txt ; t
     /Failing repos.*:/ {flag=1; next}
     /Try/ {flag=0}
     flag {print $NF}
-    /uncommitted changes are present/ {print $2}
   ' sync_output.txt | sed 's/://g' | sort -u)
 
   # Delete all failing repositories
@@ -33,9 +35,6 @@ if grep -qe "Failing repos\|uncommitted changes are present" sync_output.txt ; t
     exit 1
   fi
 fi
-
-# Remove uncommitted/unstaged changes
-repo forall -j$(nproc --all) -c "git reset --hard ; git clean -fdx"
 
 # Unshallow all repositories on local group
 repo forall -j$(nproc --all) -g local -c "git fetch --unshallow"
