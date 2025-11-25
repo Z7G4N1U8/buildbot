@@ -40,12 +40,6 @@ if [ ! -f "$HOME/.local/bin/uv" ]; then
   curl -LSs https://astral.sh/uv/install.sh | bash
 fi
 
-# Install repo
-if [ ! -f "$HOME/.local/bin/repo" ]; then
-  curl -LSs https://storage.googleapis.com/git-repo-downloads/repo > ~/.local/bin/repo
-  chmod a+x ~/.local/bin/repo
-fi
-
 # Setup RBE
 if [ ! -d "$HOME/.rbe" ]; then
   wget -q https://github.com/xyz-sundram/Releases/releases/download/client-linux-amd64/client-linux-amd64.zip
@@ -57,6 +51,10 @@ fi
 if [ ! -f "$HOME/.firmware.zip" ]; then
   curl -LSs https://mirrors.lolinet.com/firmware/lenomola/2024/eqe/official/RETAIL/EQE_RETAIL_15_V1UMS35H.10-67-7-2_subsidy-DEFAULT_regulatory-DEFAULT_cid50_CFC.xml.zip -o ~/.firmware.zip
 fi
+
+# Install repo
+curl -LSs https://storage.googleapis.com/git-repo-downloads/repo > ~/.local/bin/repo
+chmod a+x ~/.local/bin/repo
 
 # ZRAM Setup
 cat << EOF | sudo tee /etc/default/zramswap > /dev/null
