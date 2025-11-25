@@ -36,25 +36,25 @@ git config --global gc.auto 0
 git lfs install
 
 # Install uv
-if [ ! -f "~/.local/bin/uv" ]; then
+if [ ! -f "$HOME/.local/bin/uv" ]; then
   curl -LSs https://astral.sh/uv/install.sh | bash
 fi
 
 # Install repo
-if [ ! -f "~/.local/bin/repo" ]; then
+if [ ! -f "$HOME/.local/bin/repo" ]; then
   curl -LSs https://storage.googleapis.com/git-repo-downloads/repo > ~/.local/bin/repo
   chmod a+x ~/.local/bin/repo
 fi
 
 # Setup RBE
-if [ ! -d "~/.rbe" ]; then
+if [ ! -d "$HOME/.rbe" ]; then
   wget -q https://github.com/xyz-sundram/Releases/releases/download/client-linux-amd64/client-linux-amd64.zip
   unzip -q client-linux-amd64.zip -d ~/.rbe
   rm client-linux-amd64.zip
 fi
 
 # Download stock firmware
-if [ ! -f "~/.firmware.zip" ]; then
+if [ ! -f "$HOME/.firmware.zip" ]; then
   curl -LSs https://mirrors.lolinet.com/firmware/lenomola/2024/eqe/official/RETAIL/EQE_RETAIL_15_V1UMS35H.10-67-7-2_subsidy-DEFAULT_regulatory-DEFAULT_cid50_CFC.xml.zip -o ~/.firmware.zip
 fi
 
