@@ -33,10 +33,12 @@ git config --global color.ui true
 git config --global core.preloadindex true
 git config --global core.untrackedCache true
 git config --global gc.auto 0
-
-# Install additional stuff
-curl -LsSf https://astral.sh/uv/install.sh | bash
 git lfs install
+
+# Install uv
+if [ ! -f "~/.local/bin/uv" ]; then
+  curl -LSs https://astral.sh/uv/install.sh | bash
+fi
 
 # Install repo
 if [ ! -f "~/.local/bin/repo" ]; then
