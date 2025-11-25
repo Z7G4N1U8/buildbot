@@ -9,7 +9,7 @@ export USE_CCACHE=1
 export CCACHE_EXEC=/usr/bin/ccache
 
 export USE_RBE=1                                      
-export RBE_DIR="$HOME/rbe"
+export RBE_DIR="$HOME/.rbe"
 export NINJA_REMOTE_NUM_JOBS=128
 
 # BuildBuddy Connection Settings

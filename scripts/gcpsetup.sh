@@ -47,9 +47,9 @@ if [ ! -f "~/.local/bin/repo" ]; then
 fi
 
 # Setup RBE
-if [ ! -d "$HOME/rbe" ]; then
+if [ ! -d "~/.rbe" ]; then
   wget -q https://github.com/xyz-sundram/Releases/releases/download/client-linux-amd64/client-linux-amd64.zip
-  unzip -q client-linux-amd64.zip -d $HOME/rbe
+  unzip -q client-linux-amd64.zip -d ~/.rbe
   rm client-linux-amd64.zip
 fi
 
