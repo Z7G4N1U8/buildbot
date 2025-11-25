@@ -8,7 +8,7 @@ find .repo -name '*.lock' -delete
 repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune 2>&1 | tee sync_output.txt
 
 # Check if there's any failing repositories
-if grep -qe "Failing repos" sync_output.txt ; then
+if [ ${PIPESTATUS[0]} -ne 0 ] || grep -qe "Failing repos" sync_output.txt ; then
   echo "Found failing repositories, trying to fix..."
 
   # Extract path of failing repositories
@@ -25,13 +25,14 @@ if grep -qe "Failing repos" sync_output.txt ; then
       echo "Deleting: $repo_path"
       rm -rf "$repo_path" ".repo/projects/$repo_path.git"
     done
+  fi
 
-    # Sync all repositories after deletion
-    echo "Re-syncing all repositories..."
-    find .repo -name '*.lock' -delete
-    repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune
-  else
-    echo "Error detected, but could not fix. Check logs manually."
+  echo "Re-syncing all repositories..."
+  find .repo -name '*.lock' -delete
+  repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune
+
+  if [ $? -ne 0 ]; then
+    echo "Sync failed again. Exiting."
     exit 1
   fi
 fi
