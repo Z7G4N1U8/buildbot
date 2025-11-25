@@ -53,6 +53,11 @@ if [ ! -d "~/.rbe" ]; then
   rm client-linux-amd64.zip
 fi
 
+# Download stock firmware
+if [ ! -f "~/.firmware.zip" ]; then
+  curl -LSs https://mirrors.lolinet.com/firmware/lenomola/2024/eqe/official/RETAIL/EQE_RETAIL_15_V1UMS35H.10-67-7-2_subsidy-DEFAULT_regulatory-DEFAULT_cid50_CFC.xml.zip -o ~/.firmware.zip
+fi
+
 # ZRAM Setup
 cat << EOF | sudo tee /etc/default/zramswap > /dev/null
 ALGO=zstd
