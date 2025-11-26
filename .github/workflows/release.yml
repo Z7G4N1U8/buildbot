@@ -39,6 +39,24 @@ jobs:
         with:
           path: artifacts
 
+      - name: Split Large Files
+        run: |
+          find artifacts -type f -size +1900M | while read file; do
+            echo "Large file detected: $file"
+            dir=$(dirname "$file")
+            filename=$(basename "$file")
+            name="${filename%.*}"
+            pushd "$dir"
+            if zip -s 1900m "${name}-split.zip" "$filename" --compression-method store; then
+              rm "$filename"
+              echo "Splitting complete for $file"
+            else
+              echo "Error: Failed to split $file"
+              exit 1
+            fi
+            popd
+          done
+
       - name: Upload Release Assets
         run: |
           for file in $(find artifacts -type f); do
