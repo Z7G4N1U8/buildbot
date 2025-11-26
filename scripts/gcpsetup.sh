@@ -69,8 +69,8 @@ sudo sysctl vm.swappiness=100 > /dev/null
 sudo sysctl vm.page-cluster=0 > /dev/null
 sudo sysctl vm.dirty_background_ratio=10 > /dev/null
 sudo sysctl vm.dirty_ratio=40 > /dev/null
-sudo sysctl -w net.core.default_qdisc=fq > /dev/null
-sudo sysctl -w net.ipv4.tcp_congestion_control=bbr > /dev/null
+sudo sysctl net.core.default_qdisc=fq > /dev/null
+sudo sysctl net.ipv4.tcp_congestion_control=bbr > /dev/null
 
 # Setup ccache
 ccache -M 50G > /dev/null
