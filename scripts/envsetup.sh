@@ -55,3 +55,16 @@ export RBE_LINT=1
 export RBE_JAVA_POOL=default
 export RBE_METALAVA_POOL=default
 export RBE_LINT_POOL=default
+
+function paste() {
+  local file=${1:-/dev/stdin}
+  curl --data-binary @${file} https://paste.rs
+}
+
+function upload() {
+  local server=$(curl -s https://api.gofile.io/servers | jq -r '.data.servers[0].name')
+  for file in "$@"; do
+    local link=$(curl -# -F "file=@${file}" "https://${server}.gofile.io/uploadFile" | jq -r '.data|.downloadPage') 2>&1
+    echo -e "Uploaded '${file}': ${link}"
+  done
+}
