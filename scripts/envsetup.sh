@@ -5,6 +5,8 @@ ulimit -n 65536
 ulimit -S -n 65536
 
 # Setup ccache
+ccache -M 50G > /dev/null
+ccache -o compression=true
 export USE_CCACHE=1
 export CCACHE_EXEC=/usr/bin/ccache
 
