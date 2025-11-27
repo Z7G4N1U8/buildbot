@@ -10,8 +10,11 @@ jobs:
     steps:
       - name: Setup Project
         run: |
-          echo "project=$HOME/Evolution-X" >> $GITHUB_ENV
-          mkdir -p ~/Evolution-X ~/artifacts/${{ github.run_id }}
+          export project="$HOME/Evolution-X"
+          export project_files="$HOME/files/Evolution-X/${{ github.run_id }}"
+          echo "project=$project" >> $GITHUB_ENV
+          echo "project_files=$project_files" >> $GITHUB_ENV
+          mkdir -p "$project" "$project_files"
 
       - name: Sync source
         working-directory: ${{ env.project }}
@@ -33,7 +36,7 @@ jobs:
           source <(curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/envsetup.sh)
           lunch lineage_eqe-bp3a-user
           cmka evolution || exit 1
-          cp $OUT/{*.zip,*boot.img,super_empty.img,recovery.img} ~/artifacts/${{ github.run_id }}
+          cp $OUT/{*.zip,*boot.img,super_empty.img,recovery.img} ${{ env.project_files }}
         env:
           BUILD_USERNAME: peace
           BUILD_HOSTNAME: github
@@ -42,10 +45,12 @@ jobs:
       - name: Upload to SourceForge
         run: |
           rsync -avP -e "ssh -o StrictHostKeyChecking=no" \
-          ~/artifacts/${{ github.run_id }}/*.zip \
+          ${{ env.project_files }}/*.zip \
           z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/Evolution-X/
 
       - name: Display Error
         if: ${{ failure() }}
         working-directory: ${{ env.project }}
-        run: cat out/error.log
+        run: |
+          cat out/error.log
+          rm -rf ${{ env.project_files }}
