@@ -38,11 +38,11 @@ jobs:
           BUILD_HOSTNAME: github
           RBE_remote_headers: ${{ secrets.buildbuddy }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@main
-        with:
-          name: Evolution-X_${{ github.run_id }}
-          path: ~/artifacts/${{ github.run_id }}
+      - name: Upload to SourceForge
+        run: |
+          rsync -avP -e "ssh -o StrictHostKeyChecking=no" \
+          ~/artifacts/${{ github.run_id }}/*.zip \
+          z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/Evolution-X/
 
       - name: Display Error
         if: ${{ failure() }}
