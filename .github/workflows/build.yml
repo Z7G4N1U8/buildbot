@@ -22,6 +22,7 @@ jobs:
           git clone https://github.com/${{ github.actor }}/local_manifests .repo/local_manifests
           git clone https://$GH_TOKEN@github.com/${{ github.actor }}/android_vendor_evolution-priv_keys vendor/evolution-priv/keys
           curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/sync.sh | bash
+          sed -i 's|^generate_host_overrides|# generate_host_overrides|g' vendor/lineage/build/envsetup.sh
         env:
           GH_TOKEN: ${{ secrets.token }}
 
