@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Optimizing filesystem mount
-sudo mount -o remount,rw,noatime,barrier=0,commit=600,data=writeback /
+sudo mount -o remount,rw,noatime,commit=600 /
 
 packages=(
   "7zip"
