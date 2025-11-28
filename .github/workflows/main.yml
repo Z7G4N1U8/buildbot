@@ -2,11 +2,6 @@ name: Main
 
 on:
   workflow_dispatch:
-    inputs:
-      release:
-        description: "Create release"
-        required: true
-        type: boolean
 
 jobs:
   setup:
@@ -27,12 +22,6 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     needs: setup
-    secrets: inherit
-
-  release:
-    if: ${{ inputs.release }}
-    uses: ./.github/workflows/release.yml
-    needs: build
     secrets: inherit
 
   cleanup:
