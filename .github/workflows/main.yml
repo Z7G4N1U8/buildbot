@@ -20,9 +20,16 @@ jobs:
         envs: GH_TOKEN,GH_REPOSITORY
 
   build:
-    uses: ./.github/workflows/build.yml
+    runs-on: self-hosted
     needs: setup
-    secrets: inherit
+    steps:
+    - name: Build
+      env:
+        GH_TOKEN: ${{ secrets.token }}
+        GH_ACTOR: ${{ github.actor }}
+        GH_REPOSITORY: ${{ github.repository }}
+        RBE_remote_headers: ${{ secrets.buildbuddy }}
+      run: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/build.sh | bash
 
   cleanup:
     if: ${{ always() }}
