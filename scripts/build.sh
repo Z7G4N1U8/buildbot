@@ -6,6 +6,7 @@ SCRIPTS="https://raw.githubusercontent.com/$GH_REPOSITORY/refs/heads/main/script
 
 function handle_error() {
   cat out/error.log
+  paste out/error.log
   exit 1
 } ; trap handle_error ERR
 
