@@ -60,10 +60,14 @@ PRIORITY=100
 EOF
 sudo systemctl restart zramswap
 
-# Kernel Tuning (Memory + Network for RBE)
-sudo sysctl vm.swappiness=100 > /dev/null
-sudo sysctl vm.page-cluster=0 > /dev/null
-sudo sysctl vm.dirty_background_ratio=10 > /dev/null
-sudo sysctl vm.dirty_ratio=40 > /dev/null
-sudo sysctl net.core.default_qdisc=fq > /dev/null
-sudo sysctl net.ipv4.tcp_congestion_control=bbr > /dev/null
+# Kernel Tuning
+kernel_settings=(
+  "vm.swappiness=100"
+  "vm.page-cluster=0"
+  "vm.dirty_background_ratio=10"
+  "vm.dirty_ratio=40"
+  "net.core.default_qdisc=fq"
+  "net.ipv4.tcp_congestion_control=bbr"
+)
+
+sudo sysctl -q "${kernel_settings[@]}"
