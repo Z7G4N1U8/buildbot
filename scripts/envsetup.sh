@@ -58,6 +58,10 @@ export RBE_JAVA_POOL=default
 export RBE_METALAVA_POOL=default
 export RBE_LINT_POOL=default
 
+# Timeouts
+export RBE_reclient_timeout=60m
+export RBE_exec_timeout=10m
+
 function paste() {
   local file=${1:-/dev/stdin}
   curl --data-binary @${file} https://paste.rs
