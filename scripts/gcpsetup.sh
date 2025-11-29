@@ -15,7 +15,7 @@ packages=(
   "lib32ncurses-dev" "lib32readline-dev" "lib32z1-dev" "liblz4-dev" "liblz4-tool" "liblzma-dev" "libncurses6" "libncurses-dev" "libdw-dev" "libelf-dev" "libsdl1.2-dev" "libssl-dev" "libxml2" "libxml2-utils" "linux-modules-extra-$(uname -r)" "lz4" "lzop"
   "micro" "mpack"
   "p7zip-full" "p7zip-rar" "pngcrush" "protobuf-compiler" "python3-pip" "python3-protobuf" "python-is-python3"
-  "rar" "rename" "ripgrep" "rsync"
+  "rar" "rename" "ripgrep" "repo" "rsync"
   "schedtool" "sharutils" "squashfs-tools"
   "unace" "unrar" "unzip" "uudeview"
   "xsltproc"
@@ -51,10 +51,6 @@ fi
 if [ ! -f "$HOME/.firmware.zip" ]; then
   curl -LSs https://mirrors.lolinet.com/firmware/lenomola/2024/eqe/official/RETAIL/EQE_RETAIL_15_V1UMS35H.10-67-7-2_subsidy-DEFAULT_regulatory-DEFAULT_cid50_CFC.xml.zip -o ~/.firmware.zip
 fi
-
-# Install repo
-curl -LSs https://storage.googleapis.com/git-repo-downloads/repo > ~/.local/bin/repo
-chmod a+x ~/.local/bin/repo
 
 # ZRAM Setup
 cat << EOF | sudo tee /etc/default/zramswap > /dev/null
