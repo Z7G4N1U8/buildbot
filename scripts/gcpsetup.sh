@@ -30,9 +30,8 @@ git lfs install
 
 # Setup RBE
 if [ ! -d "$HOME/.rbe" ]; then
-  wget -q https://github.com/xyz-sundram/Releases/releases/download/client-linux-amd64/client-linux-amd64.zip
-  unzip -q client-linux-amd64.zip -d ~/.rbe
-  rm client-linux-amd64.zip
+  curl -LSs https://chrome-infra-packages.appspot.com/dl/infra/rbe/client/linux-amd64/+/latest -o rbe.zip
+  unzip -q rbe.zip -d ~/.rbe && rm rbe.zip
 fi
 
 # ZRAM Setup
