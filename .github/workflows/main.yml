@@ -1,49 +1,23 @@
-name: Main
+name: Build
 
 on:
   workflow_dispatch:
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: Setup
-      uses: appleboy/ssh-action@master
-      env:
-        GH_TOKEN: ${{ secrets.token }}
-        GH_REPOSITORY: ${{ github.repository }}
-      with:
-        host: ${{ secrets.gcp_host }}
-        username: ${{ secrets.gcp_user }}
-        key: ${{ secrets.gcp_key }}
-        script: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/runner.sh | bash -s registration
-        envs: GH_TOKEN,GH_REPOSITORY
-
-  build:
-    runs-on: self-hosted
-    needs: setup
-    steps:
     - name: Build
+      uses: appleboy/ssh-action@master
       env:
         GH_TOKEN: ${{ secrets.token }}
         GH_ACTOR: ${{ github.actor }}
         GH_REPOSITORY: ${{ github.repository }}
         RBE_remote_headers: ${{ secrets.buildbuddy }}
-      run: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/build.sh | bash
-
-  cleanup:
-    if: ${{ always() }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup
-      uses: appleboy/ssh-action@master
-      env:
-        GH_TOKEN: ${{ secrets.token }}
-        GH_REPOSITORY: ${{ github.repository }}
       with:
         host: ${{ secrets.gcp_host }}
         username: ${{ secrets.gcp_user }}
         key: ${{ secrets.gcp_key }}
-        script: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/runner.sh | bash -s remove
-        envs: GH_TOKEN,GH_REPOSITORY
+        script: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/build.sh | bash
+        envs: GH_TOKEN,GH_ACTOR,GH_REPOSITORY,RBE_remote_headers
+        command_timeout: 2h
