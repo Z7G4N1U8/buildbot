@@ -20,12 +20,19 @@ sudo apt-get update -y
 sudo apt-get install -y "${packages[@]}"
 
 # Configure git
-git config --global user.name "Peace"
-git config --global user.email "git@z7g4n1u8.dev"
-git config --global color.ui true
-git config --global core.preloadindex true
-git config --global core.untrackedCache true
-git config --global gc.auto 0
+git_configs=(
+  "user.name Peace"
+  "user.email git@z7g4n1u8.dev"
+  "color.ui true"
+  "core.preloadindex true"
+  "core.untrackedCache true"
+  "gc.auto 0"
+)
+
+for config in "${git_configs[@]}"; do
+  git config --global ${config}
+done
+
 git lfs install
 
 # Setup RBE
