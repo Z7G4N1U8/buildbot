@@ -6,10 +6,11 @@ sudo mount -o remount,rw,noatime,commit=600 /
 packages=(
   # lineage
   "bc" "bison" "build-essential" "ccache" "curl" "flex" "g++-multilib" "gcc-multilib"
-  "git" "git-lfs" "gnupg" "gperf" "protobuf-compiler" "python3-protobuf" "python-is-python3"
-  "repo" "lib32readline-dev" "lib32z1-dev" "libdw-dev" "libelf-dev" "lib32ncurses-dev"
-  "libncurses6" "libncurses-dev" "lz4" "libsdl1.2-dev" "libssl-dev" "libxml2" "libxml2-utils"
-  "lzop" "pngcrush" "rsync" "schedtool" "squashfs-tools" "xsltproc" "zip" "zlib1g-dev"
+  "git" "git-lfs" "gnupg" "gperf" "imagemagick" "protobuf-compiler" "python3-protobuf"
+  "python-is-python3" "lib32readline-dev" "lib32z1-dev" "libdw-dev" "libelf-dev"
+  "lib32ncurses-dev" "libncurses6" "libncurses-dev" "lz4" "libsdl1.2-dev" "libssl-dev"
+  "libxml2" "libxml2-utils" "lzop" "pngcrush" "repo" "rsync" "schedtool" "squashfs-tools"
+  "xsltproc" "zip" "zlib1g-dev"
 
   # extra
   "btop" "linux-modules-extra-$(uname -r)" "micro" "zram-tools" "zstd"
