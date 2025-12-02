@@ -1,8 +1,21 @@
 #!/usr/bin/env bash
 
-PROJECT="$HOME/Evolution-X"
-PROJECT_FILES="$HOME/files/Evolution-X"
-SCRIPTS="https://raw.githubusercontent.com/$GH_REPOSITORY/refs/heads/main/scripts"
+function set_vars() {
+  MANIFEST=$1
+  BRANCH=$2
+  TARGET=$3
+  BUILD_TYPE=$4
+}
+
+case "$ANDROID" in
+  LineageOS) set_vars https://github.com/LineageOS/android.git lineage-23.0 bacon userdebug ;;
+  Evolution-X) set_vars https://github.com/Evolution-X/manifest.git bka evolution user ;;
+esac
+
+PROJECT="$HOME/$ANDROID"
+PROJECT_FILES="$HOME/files/$ANDROID"
+TOOLS="https://raw.githubusercontent.com/$GH_REPOSITORY/refs/heads/main"
+RSYNC_OPTS=( -avP --exclude='*-ota.zip' --include='*.zip' --exclude='*' )
 
 function handle_error() {
   cat out/error.log
@@ -11,27 +24,29 @@ function handle_error() {
 } ; trap handle_error ERR
 
 mkdir -p $PROJECT $PROJECT_FILES
-curl -LSs $SCRIPTS/gcpsetup.sh | bash
+curl -LSs $TOOLS/scripts/gcpsetup.sh | bash
 
 cd $PROJECT
 
-rm -rf .repo/local_manifests vendor/evolution-priv/keys
-repo init --depth 1 --git-lfs -u https://github.com/Evolution-X/manifest -b bq1
-git clone https://github.com/$GH_ACTOR/local_manifests .repo/local_manifests
-git clone https://$GH_TOKEN@github.com/$GH_ACTOR/android_vendor_evolution-priv_keys vendor/evolution-priv/keys
-curl -LSs $SCRIPTS/sync.sh | bash
+rm -rf .repo/local_manifests vendor/private/keys
+repo init --depth 1 --git-lfs -u $MANIFEST -b $BRANCH
+git clone https://github.com/$GH_ACTOR/android_local_manifests.git .repo/local_manifests
+git clone https://$GH_TOKEN@github.com/$GH_ACTOR/android_vendor_private_keys.git vendor/private/keys
+curl -LSs $TOOLS/scripts/sync.sh | bash
 
-# Fixes envsetup.sh getting stuck due to generate_host_overrides function
-sed -i '/^[[:space:]]*generate_host_overrides[[:space:]]*$/d' vendor/lineage/build/envsetup.sh
+if [ "$ANDROID" != "LineageOS" ]; then
+  # sed -i '/^[[:space:]]*generate_host_overrides[[:space:]]*$/d' vendor/lineage/build/envsetup.sh
+  cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am && cd -
+fi
 
 source build/envsetup.sh
-source <(curl -LSs $SCRIPTS/envsetup.sh)
+source <(curl -LSs $TOOLS/scripts/envsetup.sh)
 
 export BUILD_USERNAME="peace"
 export BUILD_HOSTNAME="github"
 
-lunch lineage_eqe-bp3a-user
-cmka evolution
+breakfast eqe $BUILD_TYPE
+cmka $TARGET
 
-cp -u $OUT/*.zip $PROJECT_FILES
-rsync -avP -e "ssh -o StrictHostKeyChecking=no" $OUT/*.zip z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/Evolution-X
+rsync "${RSYNC_OPTS[@]}" $OUT/ $PROJECT_FILES
+rsync "${RSYNC_OPTS[@]}" -e "ssh -o StrictHostKeyChecking=no" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID

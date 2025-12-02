@@ -2,6 +2,13 @@ name: Build
 
 on:
   workflow_dispatch:
+    inputs:
+      android:
+        description: 'ROM to build'
+        required: true
+        default: 'LineageOS'
+        type: choice
+        options: [LineageOS, Evolution-X]
 
 jobs:
   build:
@@ -10,6 +17,7 @@ jobs:
     - name: Build
       uses: appleboy/ssh-action@master
       env:
+        ANDROID: ${{ inputs.android }}
         GH_TOKEN: ${{ secrets.token }}
         GH_ACTOR: ${{ github.actor }}
         GH_REPOSITORY: ${{ github.repository }}
@@ -19,5 +27,5 @@ jobs:
         username: ${{ secrets.gcp_user }}
         key: ${{ secrets.gcp_key }}
         script: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/build.sh | bash
-        envs: GH_TOKEN,GH_ACTOR,GH_REPOSITORY,RBE_remote_headers
+        envs: ANDROID,GH_TOKEN,GH_ACTOR,GH_REPOSITORY,RBE_remote_headers
         command_timeout: 2h
