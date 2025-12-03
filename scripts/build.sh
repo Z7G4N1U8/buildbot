@@ -34,10 +34,7 @@ git clone https://github.com/$GH_ACTOR/android_local_manifests.git .repo/local_m
 git clone https://$GH_TOKEN@github.com/$GH_ACTOR/android_vendor_private_keys.git vendor/private/keys
 curl -LSs $TOOLS/scripts/sync.sh | bash
 
-if [ "$ANDROID" != "LineageOS" ]; then
-  # sed -i '/^[[:space:]]*generate_host_overrides[[:space:]]*$/d' vendor/lineage/build/envsetup.sh
-  (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am)
-fi
+[ "$ANDROID" != "LineageOS" ] && (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am)
 
 source build/envsetup.sh
 source <(curl -LSs $TOOLS/scripts/envsetup.sh)
