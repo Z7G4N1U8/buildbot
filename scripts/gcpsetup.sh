@@ -9,7 +9,7 @@ packages=(
   "git" "git-lfs" "gnupg" "gperf" "imagemagick" "protobuf-compiler" "python3-protobuf"
   "python-is-python3" "lib32readline-dev" "lib32z1-dev" "libdw-dev" "libelf-dev"
   "lib32ncurses-dev" "libncurses6" "libncurses-dev" "lz4" "libsdl1.2-dev" "libssl-dev"
-  "libxml2" "libxml2-utils" "lzop" "pngcrush" "repo" "rsync" "schedtool" "squashfs-tools"
+  "libxml2" "libxml2-utils" "lzop" "pngcrush" "rsync" "schedtool" "squashfs-tools"
   "xsltproc" "zip" "zlib1g-dev"
 
   # extra
@@ -41,6 +41,10 @@ if [ ! -d "$HOME/.rbe" ]; then
   curl -LSs https://chrome-infra-packages.appspot.com/dl/infra/rbe/client/linux-amd64/+/latest -o rbe.zip
   unzip -q rbe.zip -d ~/.rbe && rm rbe.zip
 fi
+
+# Install repo
+sudo curl -LSs https://storage.googleapis.com/git-repo-downloads/repo -o /usr/local/bin/repo
+sudo chmod +x /usr/local/bin/repo
 
 # ZRAM Setup
 cat << EOF | sudo tee /etc/default/zramswap > /dev/null
