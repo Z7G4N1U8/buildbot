@@ -36,7 +36,7 @@ curl -LSs $TOOLS/scripts/sync.sh | bash
 
 if [ "$ANDROID" != "LineageOS" ]; then
   # sed -i '/^[[:space:]]*generate_host_overrides[[:space:]]*$/d' vendor/lineage/build/envsetup.sh
-  cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am && cd -
+  (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am)
 fi
 
 source build/envsetup.sh
