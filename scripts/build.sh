@@ -35,8 +35,6 @@ git clone https://$GH_TOKEN@github.com/$GH_ACTOR/android_vendor_private_keys.git
 curl -LSs $TOOLS/scripts/sync.sh | bash
 
 [ "$ANDROID" != "LineageOS" ] && (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am)
-
-source build/envsetup.sh
 source <(curl -LSs $TOOLS/scripts/envsetup.sh)
 
 export BUILD_USERNAME="peace"

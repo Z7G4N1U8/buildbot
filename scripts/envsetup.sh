@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+source build/envsetup.sh
 
 # Increase System Limits
 ulimit -n 65536
