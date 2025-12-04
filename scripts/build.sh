@@ -34,7 +34,7 @@ git clone https://github.com/$GH_ACTOR/android_local_manifests.git .repo/local_m
 git clone https://$GH_TOKEN@github.com/$GH_ACTOR/android_vendor_private_keys.git vendor/private/keys
 curl -LSs $TOOLS/scripts/sync.sh | bash
 
-[ "$ANDROID" != "LineageOS" ] && (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am)
+[ "$ANDROID" != "LineageOS" ] && (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am) || true
 source <(curl -LSs $TOOLS/scripts/envsetup.sh)
 
 export BUILD_USERNAME="peace"
@@ -44,4 +44,4 @@ breakfast eqe $BUILD_TYPE
 cmka $TARGET
 
 rsync "${RSYNC_OPTS[@]}" $OUT/ $PROJECT_FILES
-[ $SF_UPLOAD == true ] && rsync "${RSYNC_OPTS[@]}" -e "ssh -o StrictHostKeyChecking=no" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID
+[ $SF_UPLOAD == true ] && rsync "${RSYNC_OPTS[@]}" -e "ssh -o StrictHostKeyChecking=no" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID || true
