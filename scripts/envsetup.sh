@@ -18,6 +18,7 @@ export NINJA_REMOTE_NUM_JOBS=256
 
 # BuildBuddy Connection Settings
 export RBE_service="remote.buildbuddy.io:443"
+export RBE_remote_headers=x-buildbuddy-api-key=$BB_API_KEY
 export RBE_use_rpc_credentials=false                   
 export RBE_service_no_auth=true                       
 
@@ -36,6 +37,7 @@ export RBE_SIGNAPK_EXEC_STRATEGY=remote_local_fallback
 export RBE_CXX_EXEC_STRATEGY=remote_local_fallback
 export RBE_CXX_LINKS_EXEC_STRATEGY=remote_local_fallback
 export RBE_ABI_LINKER_EXEC_STRATEGY=remote_local_fallback
+export RBE_ABI_DUMPER_EXEC_STRATEGY=
 export RBE_CLANG_TIDY_EXEC_STRATEGY=remote_local_fallback
 export RBE_METALAVA_EXEC_STRATEGY=remote_local_fallback
 export RBE_LINT_EXEC_STRATEGY=remote_local_fallback
@@ -51,6 +53,7 @@ export RBE_SIGNAPK=1
 export RBE_CXX_LINKS=1
 export RBE_CXX=1
 export RBE_ABI_LINKER=1
+export RBE_ABI_DUMPER=
 export RBE_CLANG_TIDY=1
 export RBE_METALAVA=1
 export RBE_LINT=1

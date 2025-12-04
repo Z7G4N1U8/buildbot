@@ -18,14 +18,14 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         ANDROID: ${{ inputs.android }}
+        BB_API_KEY: ${{ secrets.bb_api_key }}
         GH_TOKEN: ${{ secrets.token }}
         GH_ACTOR: ${{ github.actor }}
         GH_REPOSITORY: ${{ github.repository }}
-        RBE_remote_headers: ${{ secrets.buildbuddy }}
       with:
         host: ${{ secrets.gcp_host }}
         username: ${{ secrets.gcp_user }}
         key: ${{ secrets.gcp_key }}
         script: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/build.sh | bash
-        envs: ANDROID,GH_TOKEN,GH_ACTOR,GH_REPOSITORY,RBE_remote_headers
+        envs: ANDROID,BB_API_KEY,GH_TOKEN,GH_ACTOR,GH_REPOSITORY
         command_timeout: 2h
