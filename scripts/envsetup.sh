@@ -17,7 +17,7 @@ export RBE_DIR="$HOME/.rbe"
 export NINJA_REMOTE_NUM_JOBS=256
 
 # BuildBuddy Connection Settings
-export RBE_service="aosp.buildbuddy.io:443"
+export RBE_service="remote.buildbuddy.io:443"
 export RBE_use_rpc_credentials=false                   
 export RBE_service_no_auth=true                       
 
