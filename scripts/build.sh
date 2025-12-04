@@ -44,4 +44,4 @@ breakfast eqe $BUILD_TYPE
 cmka $TARGET
 
 rsync "${RSYNC_OPTS[@]}" $OUT/ $PROJECT_FILES
-rsync "${RSYNC_OPTS[@]}" -e "ssh -o StrictHostKeyChecking=no" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID
+[ $SF_UPLOAD == true ] && rsync "${RSYNC_OPTS[@]}" -e "ssh -o StrictHostKeyChecking=no" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID
