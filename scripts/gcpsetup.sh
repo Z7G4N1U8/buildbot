@@ -36,12 +36,6 @@ done
 
 git lfs install
 
-# Setup RBE
-if [ ! -d "$HOME/.rbe" ]; then
-  curl -LSs https://chrome-infra-packages.appspot.com/dl/infra/rbe/client/linux-amd64/+/latest -o rbe.zip
-  unzip -q rbe.zip -d ~/.rbe && rm rbe.zip
-fi
-
 # Install repo
 sudo curl -LSs https://storage.googleapis.com/git-repo-downloads/repo -o /usr/local/bin/repo
 sudo chmod +x /usr/local/bin/repo
