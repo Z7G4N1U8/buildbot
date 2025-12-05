@@ -8,8 +8,8 @@ function set_vars() {
 }
 
 case "$ANDROID" in
-  LineageOS) set_vars https://github.com/LineageOS/android.git lineage-23.0 bacon userdebug ;;
-  Evolution-X) set_vars https://github.com/Evolution-X/manifest.git bka evolution user ;;
+  LineageOS) set_vars https://github.com/LineageOS/android.git lineage-23.1 bacon userdebug ;;
+  Evolution-X) set_vars https://github.com/Evolution-X/manifest.git bq1 evolution user ;;
 esac
 
 PROJECT="$HOME/$ANDROID"
@@ -37,7 +37,7 @@ curl -LSs $TOOLS/scripts/sync.sh | bash
 [ "$ANDROID" != "LineageOS" ] && (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am) || true
 source <(curl -LSs $TOOLS/scripts/envsetup.sh)
 
-breakfast eqe $BUILD_TYPE
+lunch lineage_eqe-bp3a-$BUILD_TYPE
 cmka $TARGET
 
 rsync "${RSYNC_OPTS[@]}" $OUT/ $PROJECT_FILES
