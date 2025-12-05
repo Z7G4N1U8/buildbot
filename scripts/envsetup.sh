@@ -13,6 +13,10 @@ ccache -o compression=true
 export USE_CCACHE=1
 export CCACHE_EXEC=/usr/bin/ccache
 
+# Setup user/host name
+export BUILD_USERNAME=$USER
+export BUILD_HOSTNAME=$HOSTNAME
+
 function paste() {
   local file=${1:-/dev/stdin}
   curl --data-binary @${file} https://paste.rs

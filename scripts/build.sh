@@ -37,9 +37,6 @@ curl -LSs $TOOLS/scripts/sync.sh | bash
 [ "$ANDROID" != "LineageOS" ] && (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am) || true
 source <(curl -LSs $TOOLS/scripts/envsetup.sh)
 
-export BUILD_USERNAME="peace"
-export BUILD_HOSTNAME="github"
-
 breakfast eqe $BUILD_TYPE
 cmka $TARGET
 
