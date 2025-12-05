@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-source build/envsetup.sh
-source <(curl -LSs $TOOLS/scripts/rbe.sh)
+source build/envsetup.sh > /dev/null
+source <(curl -LSs $TOOLS/scripts/rbe.sh) > /dev/null
 
 # Increase System Limits
 ulimit -n 65536
