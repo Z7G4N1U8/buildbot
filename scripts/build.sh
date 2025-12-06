@@ -28,10 +28,9 @@ curl -LSs $TOOLS/scripts/gcpsetup.sh | bash
 
 cd $PROJECT
 
-rm -rf .repo/local_manifests vendor/private/keys
+rm -rf .repo/local_manifests
 repo init --depth 1 --git-lfs -u $MANIFEST -b $BRANCH
 git clone https://github.com/$GH_ACTOR/android_local_manifests.git .repo/local_manifests
-git clone https://$GH_TOKEN@github.com/$GH_ACTOR/android_vendor_private_keys.git vendor/private/keys
 curl -LSs $TOOLS/scripts/sync.sh | bash
 
 [ "$ANDROID" != "LineageOS" ] && (cd device/motorola/eqe && curl -LSs $TOOLS/patches/$ANDROID.patch | git am) || true
