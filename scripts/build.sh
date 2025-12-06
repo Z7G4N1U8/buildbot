@@ -40,4 +40,4 @@ lunch lineage_eqe-bp3a-$BUILD_TYPE
 cmka $TARGET
 
 rsync "${RSYNC_OPTS[@]}" $OUT/ $PROJECT_FILES
-[ $SF_UPLOAD == true ] && rsync "${RSYNC_OPTS[@]}" -e "ssh -o StrictHostKeyChecking=no" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID || true
+[ $SF_UPLOAD == true ] && rsync "${RSYNC_OPTS[@]}" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID || true

@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       android:
-        description: 'ROM to build'
+        description: "ROM to build"
         required: true
-        default: 'LineageOS'
+        default: "LineageOS"
         type: choice
         options: [LineageOS, Evolution-X]
       upload:
-        description: 'Upload to SourceForge'
+        description: "Upload to SourceForge"
         required: true
         type: boolean
 
@@ -18,18 +18,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Build
-      uses: appleboy/ssh-action@master
-      env:
-        ANDROID: ${{ inputs.android }}
-        BB_API_KEY: ${{ secrets.bb_api_key }}
-        GH_ACTOR: ${{ github.actor }}
-        GH_REPOSITORY: ${{ github.repository }}
-        SF_UPLOAD: ${{ inputs.upload }}
-      with:
-        host: ${{ secrets.gcp_host }}
-        username: ${{ secrets.gcp_user }}
-        key: ${{ secrets.gcp_key }}
-        script: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/build.sh | bash
-        envs: ANDROID,BB_API_KEY,GH_ACTOR,GH_REPOSITORY,SF_UPLOAD
-        command_timeout: 2h
+      - name: Build
+        uses: appleboy/ssh-action@master
+        env:
+          ANDROID: ${{ inputs.android }}
+          BB_API_KEY: ${{ secrets.bb_api_key }}
+          GH_ACTOR: ${{ github.actor }}
+          GH_REPOSITORY: ${{ github.repository }}
+          SF_UPLOAD: ${{ inputs.upload }}
+          SSH_KEY: ${{ secrets.ssh_key }}
+        with:
+          host: ${{ secrets.gcp_host }}
+          username: ${{ secrets.gcp_user }}
+          key: ${{ secrets.ssh_key }}
+          script: curl -LSs https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/scripts/build.sh | bash
+          envs: ANDROID,BB_API_KEY,GH_ACTOR,GH_REPOSITORY,SF_UPLOAD,SSH_KEY
+          command_timeout: 2h

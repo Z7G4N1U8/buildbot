@@ -37,6 +37,16 @@ done
 
 git lfs install
 
+# Setup ssh
+echo "$SSH_KEY" > ~/.ssh/id_ed25519
+chmod 600 ~/.ssh/id_ed25519
+ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
+cat <<EOF > ~/.ssh/config
+Host *
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+EOF
+
 # Install repo
 sudo curl -LSs https://storage.googleapis.com/git-repo-downloads/repo -o /usr/local/bin/repo
 sudo chmod +x /usr/local/bin/repo
