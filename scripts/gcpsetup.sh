@@ -24,6 +24,7 @@ sudo apt-get install -y "${packages[@]}"
 git_configs=(
   "user.name Peace"
   "user.email git@z7g4n1u8.dev"
+  "trailer.changeid.key Change-Id"
   "color.ui true"
   "core.preloadindex true"
   "core.untrackedCache true"
