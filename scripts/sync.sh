@@ -18,11 +18,12 @@ while [ $COUNT -lt $MAX_TRIES ]; do
 
   # Delete failing repositories
   FAILING_REPOS=$(awk '/Failing repos.*:/{f=1;next}/Try/{exit}f{print $NF}' sync_output.txt | sort -u)
-  [ -n "$FAILING_REPOS" ] && for REPO_PATH in $FAILING_REPOS; do
-    [ -z "$REPO_PATH" ] && continue
-    echo "Deleting: $REPO_PATH"
-    rm -rf "$REPO_PATH" ".repo/projects/$REPO_PATH.git"
-  done
+  if [ -n "$FAILING_REPOS" ]; then
+    for REPO_PATH in $FAILING_REPOS; do
+      echo "Deleting: $REPO_PATH"
+      rm -rf "$REPO_PATH" ".repo/projects/$REPO_PATH.git"
+    done
+  fi
 
   # Remove stray .lock files under .repo but skip large object and log dirs
   find .repo -name objects -prune -o -name logs -prune -o -name *.lock -type f -exec rm -f {} +
