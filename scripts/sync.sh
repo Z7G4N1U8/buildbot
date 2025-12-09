@@ -11,7 +11,6 @@ while [ $COUNT -lt $MAX_TRIES ]; do
   echo "===== Sync Attempt $COUNT of $MAX_TRIES ====="
 
   # Run repo sync command and capture the output
-  find .repo -name "*.lock" -type f -not -path "*/objects/*" -delete
   repo sync -c -j$(nproc --all) --force-sync --no-tags --no-clone-bundle --prune 2>&1 | tee sync_output.txt
 
   [ ${PIPESTATUS[0]} -eq 0 ] && break # Success: Exit loop
@@ -24,4 +23,7 @@ while [ $COUNT -lt $MAX_TRIES ]; do
     echo "Deleting: $REPO_PATH"
     rm -rf "$REPO_PATH" ".repo/projects/$REPO_PATH.git"
   done
+
+  # Remove stray .lock files under .repo but skip large object and log dirs
+  find .repo -name objects -prune -o -name logs -prune -o -name *.lock -type f -exec rm -f {} +
 done
