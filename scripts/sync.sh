@@ -25,6 +25,3 @@ while [ $COUNT -lt $MAX_TRIES ]; do
     rm -rf "$REPO_PATH" ".repo/projects/$REPO_PATH.git"
   done
 done
-
-# Unshallow all repositories on local group
-repo forall -j$(nproc --all) -g local -c "git fetch --unshallow"
