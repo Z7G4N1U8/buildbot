@@ -7,7 +7,7 @@ unzip -o -q reclient.zip -d reclient && rm reclient.zip
 # Enable RBE
 export USE_RBE=1
 export RBE_DIR=reclient
-export NINJA_REMOTE_NUM_JOBS=256
+export NINJA_REMOTE_NUM_JOBS=1024
 
 # BuildBuddy Connection
 export RBE_service=remote.buildbuddy.io:443

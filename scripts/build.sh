@@ -12,8 +12,8 @@ case "$ANDROID" in
   Evolution-X) set_vars https://github.com/Evolution-X/manifest.git bq1 evolution user ;;
 esac
 
-PROJECT="$HOME/$ANDROID"
-PROJECT_FILES="$HOME/files/$ANDROID"
+PROJECT=/mnt/android
+PROJECT_DISK=/dev/disk/by-id/google-buildbot-android
 TOOLS="https://raw.githubusercontent.com/$GH_REPOSITORY/refs/heads/main"
 RSYNC_OPTS=( -avP --exclude='*-ota.zip' --include='*.zip' --exclude='*' )
 
@@ -23,12 +23,10 @@ function handle_error() {
   exit 1
 } ; trap handle_error ERR
 
-mkdir -p $PROJECT $PROJECT_FILES
-curl -LSs $TOOLS/scripts/gcpsetup.sh | bash
+sudo mkdir -p $PROJECT
+source <(curl -LSs $TOOLS/scripts/gcpsetup.sh)
 
-cd $PROJECT
-
-rm -rf .repo/local_manifests
+cd $PROJECT && rm -rf .repo/local_manifests
 repo init --git-lfs -u $MANIFEST -b $BRANCH
 git clone https://github.com/$GH_ACTOR/android_local_manifests.git .repo/local_manifests
 curl -LSs $TOOLS/scripts/sync.sh | bash
@@ -39,5 +37,4 @@ source <(curl -LSs $TOOLS/scripts/envsetup.sh)
 lunch lineage_eqe-bp3a-$BUILD_TYPE
 cmka $TARGET
 
-rsync "${RSYNC_OPTS[@]}" $OUT/ $PROJECT_FILES
 [ $SF_UPLOAD == true ] && rsync "${RSYNC_OPTS[@]}" $OUT/ z7g4n1u8@frs.sourceforge.net:/home/frs/project/eqe/$ANDROID || true

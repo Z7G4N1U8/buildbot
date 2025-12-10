@@ -3,10 +3,6 @@
 source build/envsetup.sh > /dev/null
 source <(curl -LSs $TOOLS/scripts/rbe.sh) > /dev/null
 
-# Increase System Limits
-ulimit -n 65536
-ulimit -S -n 65536
-
 # Setup ccache
 ccache -M 50G > /dev/null
 ccache -o compression=true

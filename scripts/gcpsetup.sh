@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Optimizing filesystem mount
-sudo mount -o remount,rw,noatime,commit=600 /
+function setup_disk() {
+  sudo blkid $1 >/dev/null || sudo mkfs.btrfs -f $1
+  mountpoint -q $2 || sudo mount -o compress=zstd,noatime $1 $2
+  sudo chown -R $(whoami):$(whoami) $2
+} ; setup_disk $PROJECT_DISK $PROJECT
 
 packages=(
   # lineage
@@ -13,7 +16,7 @@ packages=(
   "xsltproc" "zip" "zlib1g-dev"
 
   # extra
-  "btop" "linux-modules-extra-$(uname -r)" "micro" "zram-tools" "zstd"
+  "btop" "linux-modules-extra-$(uname -r)" "micro"
 )
 
 # Install all necessary packages
@@ -25,10 +28,6 @@ git_configs=(
   "user.name Peace"
   "user.email git@z7g4n1u8.dev"
   "trailer.changeid.key Change-Id"
-  "color.ui true"
-  "core.preloadindex true"
-  "core.untrackedCache true"
-  "gc.auto 0"
 )
 
 for config in "${git_configs[@]}"; do
@@ -51,22 +50,11 @@ EOF
 sudo curl -LSs https://storage.googleapis.com/git-repo-downloads/repo -o /usr/local/bin/repo
 sudo chmod +x /usr/local/bin/repo
 
-# ZRAM Setup
-cat << EOF | sudo tee /etc/default/zramswap > /dev/null
-ALGO=zstd
-PERCENT=100
-PRIORITY=100
-EOF
-sudo systemctl restart zramswap
-
 # Kernel Tuning
 kernel_settings=(
-  "vm.swappiness=100"
-  "vm.page-cluster=0"
-  "vm.dirty_background_ratio=10"
-  "vm.dirty_ratio=40"
   "net.core.default_qdisc=fq"
   "net.ipv4.tcp_congestion_control=bbr"
+  "net.ipv4.tcp_slow_start_after_idle=0"
 )
 
 sudo sysctl -q "${kernel_settings[@]}"
