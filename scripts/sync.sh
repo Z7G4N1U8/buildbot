@@ -4,7 +4,8 @@ MAX_TRIES=3
 COUNT=0
 
 # Remove uncommitted/unstaged changes
-repo forall -j$(nproc --all) -c "git reset --hard ; git clean -fdx" > /dev/null
+DIRTY_REPOS=$(repo status -j$(nproc --all) 2>/dev/null | awk '/^project/ {print $2}')
+[ -n "$DIRTY_REPOS" ] && repo forall -j$(nproc --all) $DIRTY_REPOS -c "git reset --hard ; git clean -fdx" > /dev/null
 
 while [ $COUNT -lt $MAX_TRIES ]; do
   COUNT=$((COUNT + 1))
